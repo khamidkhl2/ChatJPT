@@ -12,19 +12,6 @@ python3 -m http.server 8080
 
 Then visit `http://localhost:8080`.
 
-## Configure
-
-In `index.html`, the visible constant below contains the Groq API key for local testing:
-
-```js
-const GROQ_API_KEY = "your-groq-api-key";
-```
-
-The password gate is:
-
-```text
-mmrklvvJPT
-```
 
 ## Deploy
 
