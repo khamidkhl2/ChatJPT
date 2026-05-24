@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Chat JPT</title>
   <style>
     :root {
@@ -738,11 +738,12 @@
 
     .app {
       height: 100vh;
+      height: 100dvh;
+      min-height: 100svh;
       display: grid;
       grid-template-columns: var(--sidebar) 1fr;
       padding: 18px;
       gap: 18px;
-      animation: fade 280ms ease both;
     }
 
     .sidebar {
@@ -1167,6 +1168,7 @@
       width: 100%;
       max-height: 160px;
       min-height: 46px;
+      overflow-y: hidden;
       resize: none;
       border: 0;
       outline: 0;
@@ -1179,11 +1181,21 @@
     .send-btn {
       width: 48px;
       height: 48px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      flex: 0 0 auto;
       border-radius: 16px;
       color: #fff;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       box-shadow: 0 12px 28px rgba(217, 70, 146, 0.22);
       transition: 160ms ease;
+    }
+
+    .send-btn svg {
+      width: 21px;
+      height: 21px;
+      transform: translateX(0);
     }
 
     .send-btn:hover {
@@ -1203,10 +1215,9 @@
     .overlay {
       position: fixed;
       inset: 0;
-      z-index: 20;
+      z-index: 30;
       display: none;
-      background: rgba(31, 27, 45, 0.28);
-      backdrop-filter: blur(4px);
+      background: rgba(31, 27, 45, 0.24);
     }
 
     .overlay.show {
@@ -1216,7 +1227,7 @@
     .modal {
       position: fixed;
       inset: 0;
-      z-index: 30;
+      z-index: 50;
       display: none;
       place-items: center;
       padding: 20px;
@@ -1256,7 +1267,7 @@
       position: fixed;
       left: 50%;
       bottom: 24px;
-      z-index: 40;
+      z-index: 60;
       max-width: min(520px, calc(100vw - 32px));
       padding: 12px 15px;
       border-radius: 16px;
@@ -1409,8 +1420,10 @@
       .sidebar {
         position: fixed;
         inset: 10px auto 10px 10px;
-        z-index: 25;
+        z-index: 45;
         width: min(320px, calc(100vw - 20px));
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: none;
         transform: translateX(calc(-100% - 18px));
         transition: transform 220ms ease;
       }
@@ -1421,6 +1434,8 @@
 
       .main {
         height: 100vh;
+        height: 100dvh;
+        min-height: 100svh;
         border-radius: 0;
         border: 0;
       }
@@ -1469,11 +1484,17 @@
       }
 
       .composer-wrap {
-        padding: 12px 10px 14px;
+        padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
       }
 
       .composer-meta {
         padding: 0 4px;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) and (max-width: 860px) {
+      .sidebar {
+        background: rgba(34, 26, 46, 0.96);
       }
     }
 
@@ -1599,13 +1620,47 @@
       }
 
       .empty-inner h2 {
-        font-size: 2.4rem;
+        font-size: clamp(1.72rem, 8.2vw, 2.08rem);
+        line-height: 1.08;
       }
 
       .empty-orb {
-        width: 72px;
-        height: 72px;
-        border-radius: 24px;
+        width: 58px;
+        height: 58px;
+        border-radius: 20px;
+        margin-bottom: 16px;
+        font-size: 1.05rem;
+      }
+
+      .empty-state {
+        min-height: 0;
+        height: auto;
+        place-items: start center;
+        padding: 8px 10px 12px;
+      }
+
+      .empty-inner {
+        max-width: 360px;
+        width: 100%;
+      }
+
+      .empty-inner p {
+        margin: 10px auto 14px;
+        font-size: 0.92rem;
+        line-height: 1.45;
+      }
+
+      .starter-grid {
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .starter {
+        min-height: 0;
+        padding: 11px 13px;
+        border-radius: 14px;
+        font-size: 0.92rem;
+        line-height: 1.34;
       }
 
       .title-text p {
@@ -1638,6 +1693,26 @@
       .composer-meta {
         justify-content: flex-end;
       }
+
+      .composer {
+        grid-template-columns: minmax(0, 1fr) 46px;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 20px;
+      }
+
+      .composer textarea {
+        min-height: 42px;
+        max-height: 108px;
+        padding: 10px 8px;
+        line-height: 1.35;
+      }
+
+      .send-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 15px;
+      }
     }
 
     @media (max-width: 380px) {
@@ -1656,6 +1731,14 @@
       .top-actions .language-btn {
         min-width: 31px;
         padding: 0 6px;
+      }
+
+      .empty-inner h2 {
+        font-size: 1.58rem;
+      }
+
+      .starter {
+        font-size: 0.86rem;
       }
     }
 
@@ -1926,7 +2009,7 @@
         openChatsLabel: "Open chats",
         clearChat: "Clear chat",
         lockLabel: "Lock app",
-        messagePlaceholder: "Jamola, ask, plan, rewrite, vent elegantly...",
+        messagePlaceholder: "Message Chat JPT...",
         messageLabel: "Message",
         sendLabel: "Send message",
         composerHint: "Enter to send - Shift+Enter for a new line",
@@ -2010,7 +2093,7 @@
         openChatsLabel: "Открыть чаты",
         clearChat: "Очистить чат",
         lockLabel: "Заблокировать приложение",
-        messagePlaceholder: "Jamola, спроси, запланируй, перепиши или красиво выговорись...",
+        messagePlaceholder: "Сообщение Chat JPT...",
         messageLabel: "Сообщение",
         sendLabel: "Отправить сообщение",
         composerHint: "Enter - отправить; Shift+Enter - новая строка",
